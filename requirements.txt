@@ -1,0 +1,4 @@
+scp==0.14.5
+simple-term-menu==1.6.1
+termcolor==2.2.0
+pyfiglet==0.8.post1
