@@ -34,9 +34,10 @@ def main() -> None:
     except KeyboardInterrupt:
         sys.exit()
 
-    except Exception as err:
-        print(traceback.format_exc())
-        print("\n", err, "\n")
+    except Exception as general_error:
+        print(f"A general error occurred: {general_error}")
+        traceback.print_exc()
+        sys.exit(1)
 
 
 if __name__ == "__main__":

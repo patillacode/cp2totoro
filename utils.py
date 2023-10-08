@@ -61,11 +61,8 @@ def get_list_of_items(folder_path: str) -> list:
                 dirs.append(item.name)
             else:
                 files.append(item.name)
-    except FileNotFoundError:
-        message: str = colored(
-            f"Folder not found: {folder_path} - is it mounted?", "red", attrs=["bold"]
-        )
-        print(message)
+    except FileNotFoundError as fnf_error:
+        print(f"An error occurred: {fnf_error}")
         mount_ask()
         return get_list_of_items(folder_path)
 
