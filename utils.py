@@ -40,11 +40,10 @@ def mount_ask() -> None:
     if mount.lower() in ["", "y", "yes"]:
         message: str = colored("Mounting... (enter password)", "yellow", attrs=["bold"])
         print(message)
+        server_name = config["server"]["name"]
+        mount_folder = config["folders"]["origin"]
         os.system(
-            (
-                "sudo mount -o rw -t nfs totoro:/opt/mounts/media "
-                "/Users/dvitto/media/mounts/media"
-            )
+            (f"sudo mount -o rw -t nfs {server_name}:{mount_folder} " f"{mount_folder}")
         )
     else:
         bye("Ok, not mounting anything! Bye!")

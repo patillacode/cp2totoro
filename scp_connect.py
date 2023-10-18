@@ -64,7 +64,7 @@ def check_files(origin_files: list, destination_folder: str) -> None:
 
 def check_space() -> None:
     """
-    Check the available space on the server.
+    Check the available space on the base_folder in the server.
     """
     base_folder = config["server"]["base_folder"]
     awk = "awk 'NR>1{print $4}'"
@@ -120,6 +120,78 @@ def print_progress(filename, size, sent) -> None:
     print(f"{filename} ({format_size(size)}): {progress} {' ' * 10}\r", end="")
 
 
+def print_files_to_copy(origin_files: list) -> None:
+    """
+    Print the files that are about to be copied.
+
+    Args:
+        origin_files (list): The list of origin files. Each item in the list is a
+        dictionary where the key is the origin folder and the value is a list of
+        file names.
+    """
+    for full_item in origin_files:
+        for file_names in full_item.values():
+            for file_name in file_names:
+                msg: str = colored(f"- {file_name}", "cyan", attrs=["bold"])
+                print(msg)
+
+
+def collect_file_names(origin_files: list) -> list:
+    """
+    Collect all file names to be copied.
+
+    Args:
+        origin_files (list): The list of origin files. Each item in the list is a
+        dictionary where the key is the origin folder and the value is a list of
+        file names.
+
+    Returns:
+        list: The list of source files to be copied. Each item in the list is a tuple
+        where the first element is the source file path and the second element is the
+        file name.
+    """
+    return [
+        (f"{origin_folder}/{origin_file}", origin_file)
+        for full_item in origin_files
+        for origin_folder, origin_files in full_item.items()
+        for origin_file in origin_files
+    ]
+
+
+def establish_ssh_and_scp(origin_files: list, destination_folder: str) -> None:
+    """
+    Establish SSH connection and initiate SCP transfer.
+
+    Args:
+        origin_files (list): The list of origin files. Each item in the list is a
+        dictionary where the key is the origin folder and the value is a list of
+        file names.
+        destination_folder (str): The path to the destination folder on the server.
+
+    Raises:
+        Exception: If there is an error with the SSH connection.
+    """
+    print(colored("Copying...", "green", attrs=["bold"]))
+    try:
+        with SSHClient() as ssh:
+            ssh.load_system_host_keys()
+            ssh.connect("totoro")
+            with SCPClient(ssh.get_transport(), progress=print_progress) as scp:
+                source_files: list = collect_file_names(origin_files)
+
+                # Copy files to the destination folder with progress bar
+                for source_file, file_name in source_files:
+                    scp.put(source_file, remote_path=destination_folder)
+                    file_msg: str = colored(f"{file_name}", "cyan", attrs=["bold"])
+                    icon: str = colored("􀆅", "green", attrs=["bold"])
+                    print(f"{file_msg} {icon} {' ' * 30}")
+
+    except Exception as ssh_error:
+        print(f"An error occurred with the ssh connection: {ssh_error}")
+        traceback.print_exc()
+        sys.exit(1)
+
+
 def scp(origin_files: list, destination_folder: str) -> None:
     """
     Copy files from the origin to the destination using SCP with a progress bar.
@@ -141,49 +213,18 @@ def scp(origin_files: list, destination_folder: str) -> None:
     Raises:
         Exception: If there is an error with the SSH connection.
     """
+
     msg: str = colored(
         "You are about to copy the following files/folders into", "yellow", attrs=["bold"]
     )
     destination_msg: str = colored(destination_folder, "red", attrs=["bold"])
     print(msg, destination_msg)
 
-    # Collect all file names to be copied
-    for full_item in origin_files:
-        for file_names in full_item.values():
-            for file_name in file_names:
-                msg: str = colored(f"- {file_name}", "cyan", attrs=["bold"])
-                print(msg)
+    print_files_to_copy(origin_files)
 
     confirmation: str = input("Confirm to copy [y/n]:")
-
     if confirmation in ["y", "Y", "yes"]:
-        print(colored("Copying...", "green", attrs=["bold"]))
-
-        try:
-            with SSHClient() as ssh:
-                ssh.load_system_host_keys()
-                ssh.connect("totoro")
-                with SCPClient(ssh.get_transport(), progress=print_progress) as scp:
-                    # Prepare the list of source files to be copied
-                    source_files: list = [
-                        (f"{origin_folder}/{origin_file}", origin_file)
-                        for full_item in origin_files
-                        for origin_folder, origin_files in full_item.items()
-                        for origin_file in origin_files
-                    ]
-
-                    # Copy files to the destination folder with progress bar
-                    for source_file, file_name in source_files:
-                        scp.put(source_file, remote_path=destination_folder)
-                        file_msg: str = colored(f"{file_name}", "cyan", attrs=["bold"])
-                        icon: str = colored("􀆅", "green", attrs=["bold"])
-                        print(f"{file_msg} {icon} {' ' * 30}")
-
-        except Exception as ssh_error:
-            print(f"An error occurred with the ssh connection: {ssh_error}")
-            traceback.print_exc()
-            sys.exit(1)
-
+        establish_ssh_and_scp(origin_files, destination_folder)
         set_permissions(destination_folder)
         check_files(origin_files, destination_folder)
         check_space()
