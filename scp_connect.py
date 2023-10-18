@@ -6,6 +6,12 @@ from paramiko import SSHClient
 from scp import SCPClient
 from termcolor import colored
 
+from utils import read_config
+
+config = read_config()
+server_user = config["server"]["user"]
+server_name = config["server"]["name"]
+
 
 def set_permissions(destination_folder: str) -> None:
     """
@@ -21,7 +27,9 @@ def set_permissions(destination_folder: str) -> None:
         subprocess.CalledProcessError: If the subprocess call to ssh fails.
     """
     print(colored("\nSetting permissions on copied files...", "red", attrs=["bold"]))
-    subprocess.run(["ssh", "dvitto@totoro", f'chmod -R 755 "{destination_folder}"'])
+    subprocess.run(
+        ["ssh", f"{server_user}@{server_name}", f'chmod -R 755 "{destination_folder}"']
+    )
 
 
 def check_files(origin_files: list, destination_folder: str) -> None:
@@ -46,7 +54,11 @@ def check_files(origin_files: list, destination_folder: str) -> None:
         for file_names in full_item.values():
             for file_name in file_names:
                 subprocess.run(
-                    ["ssh", "dvitto@totoro", f'ls -alh "{destination_folder}{file_name}"']
+                    [
+                        "ssh",
+                        f"{server_user}@{server_name}",
+                        f'ls -alh "{destination_folder}{file_name}"',
+                    ]
                 )
 
 
@@ -54,8 +66,14 @@ def check_space() -> None:
     """
     Check the available space on the server.
     """
+    base_folder = config["server"]["base_folder"]
+    awk = "awk 'NR>1{print $4}'"
     space_left: bytes = subprocess.check_output(
-        ["ssh", "dvitto@totoro", "df -h /opt/mounts/media/ | awk 'NR>1{print $4}'"]
+        [
+            "ssh",
+            f"{server_user}@{server_name}",
+            (f"df -h {base_folder} | {awk}"),
+        ]
     )
     msg: str = colored("Space left", "green", attrs=["bold"])
     space_left_msg: str = colored(space_left.decode("utf-8"), "red", attrs=["bold"])

@@ -4,15 +4,28 @@ import sys
 
 from pathlib import Path
 
+import yaml
+
 from simple_term_menu import TerminalMenu
 from termcolor import colored
 
 from messages import bye
 
-origin_folder: str = "/Users/dvitto/media/torrents"
-series_folder: str = "/Users/dvitto/media/mounts/media/series"
-comedy_folder: str = "/Users/dvitto/media/mounts/media/comedy"
-destination_base_folder: str = "/opt/mounts/media"
+
+def read_config():
+    with open("configuration.yaml", "r") as stream:
+        try:
+            return yaml.safe_load(stream)
+        except yaml.YAMLError as exc:
+            print(exc)
+
+
+config = read_config()
+
+origin_folder: str = config["folders"]["origin"]
+series_folder: str = config["folders"]["series"]
+comedy_folder: str = config["folders"]["comedy"]
+destination_base_folder: str = config["folders"]["destination_base"]
 
 
 def mount_ask() -> None:

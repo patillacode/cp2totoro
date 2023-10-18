@@ -1,0 +1,10 @@
+server:
+  name: totoro
+  user: dvitto
+  base_folder: /opt/mounts/media
+
+folders:
+  origin: /Users/dvitto/media/torrents
+  series: /Users/dvitto/media/mounts/media/series
+  comedy: /Users/dvitto/media/mounts/media/comedy
+  destination_base: /opt/mounts/media
