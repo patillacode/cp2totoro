@@ -1,8 +1,10 @@
 import sys
 import traceback
 
-from scp_connect import scp
-from utils import bye, remove_local_files, select_destination, select_origin, welcome
+from utils.menu import select_destination, select_origin
+from utils.misc import remove_local_files
+from utils.output import bye, welcome
+from utils.scp_connect import scp
 
 
 def main() -> None:

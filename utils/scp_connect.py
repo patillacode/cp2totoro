@@ -1,10 +1,10 @@
 from termcolor import colored
 
-from utils import (
+from utils.output import print_files_to_copy
+from utils.ssh_operations import (
     check_files,
     check_space,
     establish_ssh_and_scp,
-    print_files_to_copy,
     set_permissions,
 )
 
