@@ -4,6 +4,7 @@ from simple_term_menu import TerminalMenu
 from termcolor import colored
 
 from utils.config import destination_base_folder, origin_folder, series_folder
+from utils.output import bye
 from utils.ssh_operations import mount_ask
 
 
