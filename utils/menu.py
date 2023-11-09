@@ -10,17 +10,17 @@ from utils.ssh_operations import mount_ask
 
 def get_list_of_items(folder_path: str) -> list:
     """
-    Get a list of items (directories and files) in the given folder path.
+    Retrieve and return a sorted list of items (directories and files) from a specified
+    folder path.
 
-    This function returns a sorted list of directories and files in the given folder path.
-    If the folder is not found, the function prompts the user to mount the media folder
-    and then tries to get the list of items again.
+    If the specified folder is not found, the function prompts the user to mount the media
+    folder and attempts to retrieve the list of items again.
 
     Args:
-        folder_path (str): The path of the folder.
+        folder_path (str): The path of the folder from which to retrieve items.
 
     Returns:
-        list: A sorted list of directories and files in the folder.
+        list: A sorted list of directories and files in the specified folder.
     """
     path: Path = Path(folder_path)
     dirs: list = []
@@ -41,15 +41,20 @@ def get_list_of_items(folder_path: str) -> list:
 
 def menu(selectable_items: list, add_done_option: bool = False) -> list:
     """
-    Display a terminal menu and allow the user to select multiple items.
+    Display a terminal menu with a list of selectable items and allow the user to make
+    multiple selections.
+
+    The function also provides an option to add a "DONE" option to the menu, which can be
+    used to indicate the completion of the selection process.
 
     Args:
-        selectable_items (list): The list of items to display in the menu.
-        add_done_option (bool, optional): Whether to add a "DONE" option to the menu.
-        Defaults to False.
+        selectable_items (list): The list of items to be displayed in the menu for
+        selection.
+        add_done_option (bool, optional): A flag indicating whether to add a "DONE"
+        option to the menu. Defaults to False.
 
     Returns:
-        list: The list of selected items.
+        list: The list of items selected by the user.
     """
     try:
         selectable_items += [".."]
@@ -70,10 +75,14 @@ def menu(selectable_items: list, add_done_option: bool = False) -> list:
 
 def select_destination() -> str:
     """
-    Prompt the user to select the destination folder for the file transfer.
+    Interactively prompt the user to select the destination folder for the file transfer.
+
+    The function first asks the user to specify the type of media (movies, series, comedy,
+    documentaries), and then, if the media type is 'series',
+    it further asks the user to select the series and season folders.
 
     Returns:
-        str: The selected destination folder path.
+        str: The path of the selected destination folder.
     """
     message: str = colored(
         "Are these files movies or episodes from a serie?", "yellow", attrs=["bold"]
@@ -104,18 +113,21 @@ def select_origin(
     current_folder=origin_folder, pre_selected_items=[], selection_is_done=False
 ):
     """
-    Prompt the user to select the origin folder for the file transfer.
+    Interactively prompt the user to select the origin files for the file transfer.
+
+    The function allows the user to navigate through the directory structure and select
+    multiple files. The selection process can be terminated by selecting the "DONE" option
 
     Args:
-        current_folder (str, optional):
-            The current folder path. Defaults to origin_folder.
-        pre_selected_items (list, optional):
-            The list of pre-selected items. Defaults to [].
-        selection_is_done (bool, optional):
-            Whether the selection is done. Defaults to False.
+        current_folder (str, optional): The current folder path. Defaults to origin_folder
+        pre_selected_items (list, optional): The list of items that have been pre-selected
+                                             Defaults to [].
+        selection_is_done (bool, optional): A flag indicating whether the selection
+                                            process is complete. Defaults to False.
 
     Returns:
-        list: The list of selected items.
+        list: A list of dictionaries, where each dictionary represents a folder and
+        contains the selected items from that folder.
     """
 
     if selection_is_done:

@@ -9,15 +9,18 @@ from utils.misc import format_size
 
 def print_progress(filename, size, sent) -> None:
     """
-    Print the progress of the SCP transfer.
+    Display the progress of the SCP file transfer.
+
+    This function prints the name of the file being transferred, its size, and the
+    percentage of bytes transferred so far.
 
     Args:
         filename (str): The name of the file being transferred.
-        size (int): The size of the file being transferred.
-        sent (int): The number of bytes transferred.
+        size (int): The total size of the file being transferred in bytes.
+        sent (int): The number of bytes that have been transferred so far.
     """
     filename = colored(
-        f"{filename.decode('utf-8')}",
+        f" {filename.decode('utf-8')}",
         "yellow",
         attrs=["bold"],
     )
@@ -29,28 +32,16 @@ def print_progress(filename, size, sent) -> None:
     print(f"{filename} ({format_size(size)}): {progress} {' ' * 10}\r", end="")
 
 
-def print_files_to_copy(origin_files: list) -> None:
-    """
-    Print the files that are about to be copied.
-
-    Args:
-        origin_files (list): The list of origin files. Each item in the list is a
-        dictionary where the key is the origin folder and the value is a list of
-        file names.
-    """
-    for full_item in origin_files:
-        for file_names in full_item.values():
-            for file_name in file_names:
-                msg: str = colored(f"- {file_name}", "cyan", attrs=["bold"])
-                print(msg)
-
-
 def bye(goodbye_msg="\nFarewell!\n") -> None:
     """
-    Display a farewell message and exit the program.
+    Display a farewell message and terminate the program.
+
+    This function prints a farewell message to the console and then terminates the
+    program using sys.exit(1).
 
     Args:
-        goodbye_msg (str): The farewell message to display. Defaults to "\nFarewell!\n".
+        goodbye_msg (str): The farewell message to be displayed.
+        Defaults to "Farewell!".
     """
     msg: str = colored(goodbye_msg, "red", attrs=["bold"])
     print(msg)
@@ -61,7 +52,9 @@ def welcome() -> None:
     """
     Display a welcome message and banner.
 
-    This function clears the terminal screen and prints a welcome banner and message.
+    This function clears the terminal screen and prints a welcome banner and a message
+    instructing the user on how to select files/folders for copying. The banner is
+    generated using the 'larry3d' font from the pyfiglet library.
     """
     os.system("clear")
     # lean isometric poison alligator

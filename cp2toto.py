@@ -9,18 +9,19 @@ from utils.scp_connect import scp
 
 def main() -> None:
     """
-    Main function that executes the file transfer process.
+    This is the main function that orchestrates the file transfer process.
 
-    This function performs the following steps:
-    1. Displays a welcome message.
-    2. Prompts the user to select the origin files.
-    3. Prompts the user to select the destination folder.
-    4. Copies the selected files to the destination folder.
-    5. If the copy operation is successful, prompts the user to remove the local files.
-    6. Displays a farewell message and exits the program.
+    The function follows these steps:
+    1. Displays a welcome message to the user.
+    2. Prompts the user to select the files they want to transfer (origin files).
+    3. Asks the user to specify the destination folder where the files will be transferred.
+    4. Initiates the file transfer process, copying the selected files to the destination folder.
+    5. If the file transfer is successful, the function asks the user if they want to remove the original files.
+    6. Finally, the function displays a farewell message and terminates the program.
 
-    If the user presses Ctrl+C, the program exits immediately.
-    If any other exception occurs, the program prints the exception and exits.
+    The function handles two types of exceptions:
+    - KeyboardInterrupt: If the user interrupts the program (e.g., by pressing Ctrl+C), the function immediately exits.
+    - General exceptions: If any other type of exception occurs, the function prints the exception details and exits with a status code of 1.
     """
     try:
         welcome()

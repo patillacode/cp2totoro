@@ -13,17 +13,15 @@ from utils.output import bye, print_progress
 
 def collect_file_names(origin_files: list) -> list:
     """
-    Collect all file names to be copied.
+    Collects all file names to be copied from the local system to the remote server.
 
     Args:
-        origin_files (list): The list of origin files. Each item in the list is a
-        dictionary where the key is the origin folder and the value is a list of
-        file names.
+        origin_files (list): A list of dictionaries. Each dictionary represents a
+        directory and contains pairs of directory path and list of file names in that
+        directory.
 
     Returns:
-        list: The list of source files to be copied. Each item in the list is a tuple
-        where the first element is the source file path and the second element is the
-        file name.
+        list: A list of tuples. Each tuple contains the source file path and the file name
     """
     return [
         (f"{origin_folder}/{origin_file}", origin_file)
@@ -35,12 +33,15 @@ def collect_file_names(origin_files: list) -> list:
 
 def establish_ssh_and_scp(origin_files: list, destination_folder: str) -> None:
     """
-    Establish SSH connection and initiate SCP transfer.
+    Establishes an SSH connection and initiates an SCP transfer.
+
+    This function establishes an SSH connection to the remote server and initiates an SCP
+    transfer of the specified files from the local system to the remote server.
 
     Args:
-        origin_files (list): The list of origin files. Each item in the list is a
-        dictionary where the key is the origin folder and the value is a list of
-        file names.
+        origin_files (list): A list of dictionaries. Each dictionary represents a
+        directory and contains pairs of directory path and list of file names in that
+        directory.
         destination_folder (str): The path to the destination folder on the server.
 
     Raises:
@@ -69,13 +70,13 @@ def establish_ssh_and_scp(origin_files: list, destination_folder: str) -> None:
 
 def set_permissions(destination_folder: str) -> None:
     """
-    Set permissions on copied files.
+    Sets permissions on copied files.
 
     This function sets the permissions of the copied files in the destination folder
-    to be 755 using the chmod command via ssh.
+    on the remote server to be 755 using the chmod command via ssh.
 
     Args:
-        destination_folder (str): The destination folder path on the server.
+        destination_folder (str): The path to the destination folder on the server.
 
     Raises:
         subprocess.CalledProcessError: If the subprocess call to ssh fails.
@@ -88,17 +89,17 @@ def set_permissions(destination_folder: str) -> None:
 
 def check_files(origin_files: list, destination_folder: str) -> None:
     """
-    Check files in the destination folder.
+    Checks files in the destination folder.
 
-    This function checks the files in the destination folder against the list of
-    origin files. It uses the 'ls -alh' command via ssh to print the details of each
-    file in the destination folder.
+    This function checks the files in the destination folder on the remote server against
+    the list of origin files. It uses the 'ls -alh' command via ssh to print the details
+    of each file in the destination folder.
 
     Args:
-        origin_files (list): The list of origin files. Each item in the list is a
-        dictionary where the key is the origin folder and the value is a list of
-        file names.
-        destination_folder (str): The destination folder path on the server.
+        origin_files (list): A list of dictionaries. Each dictionary represents a
+        directory and contains pairs of directory path and list of file names in that
+        directory.
+        destination_folder (str): The path to the destination folder on the server.
 
     Raises:
         subprocess.CalledProcessError: If the subprocess call to ssh fails.
@@ -118,7 +119,10 @@ def check_files(origin_files: list, destination_folder: str) -> None:
 
 def check_space() -> None:
     """
-    Check the available space on the destination_base_folder in the server.
+    Checks the available space on the destination_base_folder in the server.
+
+    This function checks the available disk space on the destination_base_folder on the
+    remote server and prints it to the console.
     """
     awk = "awk 'NR>1{print $4}'"
     space_left: bytes = subprocess.check_output(
@@ -135,11 +139,11 @@ def check_space() -> None:
 
 def mount_ask() -> None:
     """
-    Prompt the user to mount the media folder.
+    Prompts the user to mount the media folder.
 
-    This function asks the user if they want to mount the media folder. If the user
-    agrees, the function mounts the media folder. If the user disagrees, the function
-    displays a farewell message and exits the program.
+    This function asks the user if they want to mount the media folder on the local system
+    If the user agrees, the function mounts the media folder. If the user disagrees, the
+    function displays a farewell message and exits the program.
     """
     mount: str = input("Do you want to mount the media folder? [y/n]: ")
     if mount.lower() in ["", "y", "yes"]:
