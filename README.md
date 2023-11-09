@@ -44,6 +44,8 @@ The motivation behind this script was to simplify the process of copying files f
 ## Requirements
 - Python 3.6 or higher
 - SCP installed on both local and remote systems
+- [ffmpeg](https://ffmpeg.org/) installed on local system
+
 
 ## Problem Solving
 This script solves several problems:
