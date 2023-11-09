@@ -51,7 +51,7 @@ def establish_ssh_and_scp(origin_files: list, destination_folder: str) -> None:
     try:
         with SSHClient() as ssh:
             ssh.load_system_host_keys()
-            ssh.connect("totoro")
+            ssh.connect(server_name)
             with SCPClient(ssh.get_transport(), progress=print_progress) as scp:
                 source_files: list = collect_file_names(origin_files)
 

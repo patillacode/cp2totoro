@@ -4,6 +4,7 @@ import sys
 from pyfiglet import Figlet
 from termcolor import colored
 
+from utils.config import server_name
 from utils.misc import format_size
 
 
@@ -63,8 +64,10 @@ def welcome() -> None:
     print(banner)
 
     welcome_text: str = colored(
-        "\nPlease select the files/folders you want to copy to totoro: (SPACE to select, "
-        "UP/DOWN to move, ENTER to continue)\n",
+        (
+            f"\nPlease select the files/folders you want to copy to {server_name}: "
+            "(SPACE to select, UP/DOWN to move, ENTER to continue)\n"
+        ),
         "red",
         attrs=["bold"],
     )

@@ -16,7 +16,7 @@ def test_set_permissions(mock_run):
     """
     set_permissions("/path/to/destination")
     mock_run.assert_called_once_with(
-        ["ssh", "dvitto@totoro", 'chmod -R 755 "/path/to/destination"']
+        ["ssh", "user@server", 'chmod -R 755 "/path/to/destination"']
     )
 
 
@@ -33,8 +33,8 @@ def test_check_files(mock_run):
     """
     check_files([{"/path/to/origin": ["file1", "file2"]}], "/path/to/destination/")
     calls = [
-        call(["ssh", "dvitto@totoro", 'ls -alh "/path/to/destination/file1"']),
-        call(["ssh", "dvitto@totoro", 'ls -alh "/path/to/destination/file2"']),
+        call(["ssh", "user@server", 'ls -alh "/path/to/destination/file1"']),
+        call(["ssh", "user@server", 'ls -alh "/path/to/destination/file2"']),
     ]
     mock_run.assert_has_calls(calls)
 
@@ -44,7 +44,7 @@ def test_check_space(mock_check_output):
     mock_check_output.return_value = b"100G\n"
     check_space()
     mock_check_output.assert_called_once_with(
-        ["ssh", "dvitto@totoro", "df -h /opt/mounts/media/ | awk 'NR>1{print $4}'"]
+        ["ssh", "user@server", "df -h /opt/mounts/media/ | awk 'NR>1{print $4}'"]
     )
 
 
