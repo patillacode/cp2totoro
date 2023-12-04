@@ -104,7 +104,9 @@ def conversion_flow(origin_files: list) -> list:
                 if file_names:
                     new_origin_dict = {directory: []}
                     for file_name in file_names:
-                        new_file_path = convert_to_H265_codec(f"{directory}/{file_name}")
+                        new_file_path = convert_to_H265_codec(
+                            f"{directory}/{file_name}"
+                        )
                         new_file = Path(new_file_path)
                         new_origin_dict[directory].append(
                             f"{new_file.stem}{new_file.suffix}"
@@ -170,7 +172,9 @@ def convert_to_H265_codec(origin_file: str) -> str:
             formatted_time = "{:0>2}:{:0>2}:{:05.2f}".format(
                 int(hours), int(minutes), seconds
             )
-            print(f"Conversion time: {colored(formatted_time, 'white', attrs=['bold'])}")
+            print(
+                f"Conversion time: {colored(formatted_time, 'white', attrs=['bold'])}"
+            )
             print(
                 f"Space saved: {colored(f'{size_reduction}%', 'magenta', attrs=['bold'])}"
                 f" {colored(f'({space_saved})', 'cyan', attrs=['bold'])}"

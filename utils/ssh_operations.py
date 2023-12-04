@@ -3,6 +3,8 @@ import subprocess
 import sys
 import traceback
 
+from ast import pattern
+
 from paramiko import SSHClient
 from scp import SCPClient
 from termcolor import colored
@@ -85,6 +87,37 @@ def set_permissions(destination_folder: str) -> None:
     subprocess.run(
         ["ssh", f"{server_user}@{server_name}", f'chmod -R 755 "{destination_folder}"']
     )
+
+
+def rename_files(origin_files: list, destination_folder: str) -> None:
+    """
+    Renames files in the destination folder.
+
+    This function renames the files in the destination folder on the remote server.
+
+    Args:
+        origin_files (list): A list of dictionaries. Each dictionary represents a
+        directory and contains pairs of directory path and list of file names in that
+        directory.
+        destination_folder (str): The path to the destination folder on the server.
+
+    Raises:
+        subprocess.CalledProcessError: If the subprocess call to ssh fails.
+    """
+
+    print(
+        colored(
+            f"\nMaybe you want to rename the files in {destination_folder} to replace",
+            "yellow",
+            attrs=["bold"],
+        )
+    )
+
+    convert_confirmation: str = input(
+        colored("\nConfirm renaming [y/n]: ", "yellow", attrs=["bold"])
+    )
+    if convert_confirmation.lower() in ["y", "yes"]:
+        print(colored("\nRenaming files...", "green", attrs=["bold"]))
 
 
 def check_files(origin_files: list, destination_folder: str) -> None:

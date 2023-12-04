@@ -4,3 +4,5 @@ venv
 .aider*
 *.pyc
 .env
+.vscode
+

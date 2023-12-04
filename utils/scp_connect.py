@@ -1,10 +1,9 @@
-import os
-
-from utils.misc import confirmation_flow, conversion_flow
+from utils.misc import confirmation_flow
 from utils.ssh_operations import (
     check_files,
     check_space,
     establish_ssh_and_scp,
+    rename_files,
     set_permissions,
 )
 
@@ -33,12 +32,10 @@ def scp(origin_files: list, destination_folder: str) -> None:
     Raises:
         Exception: If there is an error with the SSH connection.
     """
-    os.system("clear")
-    origin_files = conversion_flow(origin_files)
-
     if confirmation_flow(origin_files, destination_folder):
         establish_ssh_and_scp(origin_files, destination_folder)
         set_permissions(destination_folder)
         check_files(origin_files, destination_folder)
         check_space()
+        rename_files(origin_files, destination_folder)
         return True
