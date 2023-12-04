@@ -31,6 +31,7 @@ def get_list_of_items(folder_path: str) -> list:
                 dirs.append(item.name)
             else:
                 files.append(item.name)
+
     except FileNotFoundError as fnf_error:
         print(f"An error occurred: {fnf_error}")
         mount_ask()
@@ -69,6 +70,7 @@ def menu(selectable_items: list, add_done_option: bool = False) -> list:
         )
         terminal_menu.show()
         return list(terminal_menu.chosen_menu_entries)
+
     except TypeError:
         raise (KeyboardInterrupt)
 
@@ -106,6 +108,7 @@ def select_destination() -> str:
         print(message, "\n")
         season: str = menu(get_list_of_items(f"{series_folder}/{serie}"))[0]
         destination: str = f"{destination_base_folder}/series/{serie}/{season}/"
+
     return destination
 
 

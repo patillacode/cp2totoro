@@ -37,5 +37,7 @@ def scp(origin_files: list, destination_folder: str) -> None:
         set_permissions(destination_folder)
         check_files(origin_files, destination_folder)
         check_space()
-        rename_files(origin_files, destination_folder)
+        # only rename files if we are copying to the series folder
+        if "series" in destination_folder:
+            rename_files(origin_files, destination_folder)
         return True
