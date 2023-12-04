@@ -1,15 +1,17 @@
 # CP2TOTO
 
 ## Table of Contents
-- [Introduction](#introduction)
-- [Features](#features)
-- [Installation](#installation)
-- [Requirements](#requirements)
-- [Usage](#usage)
-- [Motivation](#motivation)
-- [Problem Solving](#problem-solving)
-- [Contribution](#contribution)
-- [Contact](#contact)
+- [CP2TOTO](#cp2toto)
+  - [Table of Contents](#table-of-contents)
+  - [Introduction](#introduction)
+  - [Installation](#installation)
+  - [Usage](#usage)
+  - [Motivation](#motivation)
+  - [Features](#features)
+  - [Requirements](#requirements)
+  - [Problem Solving](#problem-solving)
+  - [Contribution](#contribution)
+  - [Contact](#contact)
 
 ## Introduction
 CP2TOTO is a Python script that automates the process of copying files from a local system to a remote server using Secure Copy Protocol (SCP). It provides an interactive terminal interface for users to select files/folders for copying, and offers the option to convert files to mp4 with H.265 codec before copying.
@@ -58,4 +60,4 @@ This script solves several problems:
 If you want to contribute to this project, please fork the repository and make changes as you'd like. Pull requests are warmly welcome.
 
 ## Contact
-Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
+Project Link: [https://github.com/patillacode/cp2toto](https://github.com/patillacode/cp2toto)
