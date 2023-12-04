@@ -29,12 +29,12 @@ def main() -> None:
     """
     try:
         welcome()
-        origin_items = select_origin()
-        destination = select_destination()
-        origin_items = conversion_flow(origin_items)
-        scp_completed = scp(origin_items, destination)
+        origin_files = select_origin()
+        destination_folder = select_destination()
+        origin_files = conversion_flow(origin_files)
+        scp_completed = scp(origin_files, destination_folder)
         if scp_completed:
-            remove_local_files(origin_items)
+            remove_local_files(origin_files)
 
         bye()
 

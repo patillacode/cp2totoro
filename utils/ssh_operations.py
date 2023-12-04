@@ -2,9 +2,6 @@ import os
 import re
 import subprocess
 import sys
-import traceback
-
-from ast import pattern
 
 from paramiko import SSHClient
 from scp import SCPClient
@@ -88,9 +85,9 @@ def set_permissions(destination_folder: str) -> None:
     )
 
 
-def rename_files(origin_files: list, destination_folder: str, ssh: SSHClient) -> None:
+def rename_files(origin_files: list, destination_folder: str) -> None:
     """
-    Renames files in the destination folder on the remote server based on a specific pattern.
+    Renames files in the destination folder on the server based on a specific pattern.
 
     This function prompts the user for confirmation, performs a dry-run to display the
     proposed new file names, and if the user confirms, it renames the files.
@@ -100,7 +97,6 @@ def rename_files(origin_files: list, destination_folder: str, ssh: SSHClient) ->
         directory and contains pairs of directory path and list of file names in that
         directory.
         destination_folder (str): The path to the destination folder on the server.
-        ssh (SSHClient): An active SSHClient instance.
 
     Raises:
         Exception: If there is an error with the SSH connection or command execution.
@@ -111,22 +107,18 @@ def rename_files(origin_files: list, destination_folder: str, ssh: SSHClient) ->
     rename_confirmation: str = input(
         colored("Do you want to rename the files? [y/n]: ", "yellow", attrs=["bold"])
     )
+    print()
     if rename_confirmation.lower() not in ["y", "yes"]:
         return
-
     # Extract serie_name and season_number from the destination_folder path
     season_folder = destination_folder.rstrip("/")
     season_number = season_folder.split("/")[-1]
     serie_name = season_folder.split("/")[-2]
-    from icecream import ic
 
-    ic(season_folder)
-    ic(season_number)
-    ic(serie_name)
     # Use regex to find season and episode numbers
     season_match = re.search(r"(?:S|season)(\d+)", season_number, re.IGNORECASE)
     if season_match:
-        season_number = season_match.group(1)
+        season_number = season_match.group(1).zfill(2)
     else:
         print(
             colored(
@@ -139,11 +131,12 @@ def rename_files(origin_files: list, destination_folder: str, ssh: SSHClient) ->
         return
 
     # Perform a dry-run to display the proposed new file names
-    stdin, stdout, stderr = subprocess.run(
-        ["ssh", f"{server_user}@{server_name}", f'ls -1 "{season_folder}"']
-    )
-    # stdin, stdout, stderr = ssh.exec_command(f'ls -1 "{season_folder}"')
-    files = stdout.readlines()
+    stdout = subprocess.run(
+        ["ssh", f"{server_user}@{server_name}", f'ls -1 "{season_folder}"'],
+        capture_output=True,
+        text=True,
+    ).stdout
+    files = stdout.splitlines()
     renamed_files = []
     for file in files:
         file = file.strip()
@@ -154,21 +147,27 @@ def rename_files(origin_files: list, destination_folder: str, ssh: SSHClient) ->
             new_file_name = (
                 f"{serie_name}_S{season_number}_E{episode_number}.{file_extension}"
             )
-            renamed_files.append((file, new_file_name))
-            print(colored(f"Will rename {file} to {new_file_name}", "yellow"))
+            if file != new_file_name:
+                renamed_files.append((file, new_file_name))
+                print(colored(f"Will rename {file} to {new_file_name}", "yellow"))
         else:
             print(colored(f"Skipping file with no episode number: {file}", "red"))
 
     # Ask for confirmation to proceed with actual renaming
     rename_confirmation = input(
-        colored("Proceed with renaming? [y/n]: ", "yellow", attrs=["bold"])
+        colored("\nProceed with renaming? [y/n]: ", "yellow", attrs=["bold"])
     )
+    print()
     if rename_confirmation.lower() in ["y", "yes"]:
         for old_name, new_name in renamed_files:
-            ssh.exec_command(
-                f'mv "{season_folder}/{old_name}" "{season_folder}/{new_name}"'
+            subprocess.run(
+                [
+                    "ssh",
+                    f"{server_user}@{server_name}",
+                    f'mv "{season_folder}/{old_name}" "{season_folder}/{new_name}"',
+                ]
             )
-            print(colored(f"Renamed {old_name} to {new_name}", "green"))
+            print(colored(f"- Renamed {old_name} to {new_name}", "green"))
 
 
 def check_files(origin_files: list, destination_folder: str) -> None:
