@@ -1,63 +1,90 @@
-# CP2TOTO
+# CP2TOTO - Simplified File Transfer Automation
+
+Welcome to CP2TOTO! This tool is designed to streamline the process of transferring files from your local machine to a remote server using the Secure Copy Protocol (SCP). With a user-friendly terminal interface, CP2TOTO takes the hassle out of file transfers and even offers file conversion to optimize storage space on your server.
 
 ## Table of Contents
-- [CP2TOTO](#cp2toto)
+- [CP2TOTO - Simplified File Transfer Automation](#cp2toto---simplified-file-transfer-automation)
   - [Table of Contents](#table-of-contents)
   - [Introduction](#introduction)
+  - [Features](#features)
   - [Installation](#installation)
   - [Usage](#usage)
-  - [Motivation](#motivation)
-  - [Features](#features)
-  - [Requirements](#requirements)
-  - [Problem Solving](#problem-solving)
-  - [Contribution](#contribution)
+  - [Troubleshooting](#troubleshooting)
+  - [Contributing](#contributing)
+  - [License](#license)
   - [Contact](#contact)
 
 ## Introduction
-CP2TOTO is a Python script that automates the process of copying files from a local system to a remote server using Secure Copy Protocol (SCP). It provides an interactive terminal interface for users to select files/folders for copying, and offers the option to convert files to mp4 with H.265 codec before copying.
-
-## Installation
-To install and set up the project, follow these steps:
-
-1. Clone the repository to your local machine.
-2. Navigate to the project directory.
-3. Run the following commands:
-```bash
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-```
-
-## Usage
-To use the script, run the following command in the terminal:
-```bash
-python cp2toto.py
-```
-Follow the prompts in the terminal to select files/folders for copying.
-
-## Motivation
-The motivation behind this script was to simplify the process of copying files from a local system to a remote server. Manually selecting files and folders for copying can be a tedious and error-prone task. This script automates the process, reducing the possibility of errors and saving time.
+SCP, or Secure Copy Protocol, is a method for securely transferring files between a local host and a remote host or between two remote hosts. CP2TOTO leverages SCP to provide a seamless file transfer experience, complete with interactive selection and optional file conversion to the efficient H.265 mp4 format.
 
 ## Features
-- Automates the process of copying files from a local system to a remote server.
-- Provides an interactive terminal interface for users to select files/folders for copying.
-- Offers the option to convert files to mp4 with H.265 codec before copying.
+- **Interactive File Selection**: Choose exactly which files or folders you want to transfer with an easy-to-use interface.
+- **File Conversion**: Convert your files to mp4 with H.265 codec on-the-fly for efficient storage.
+- **Automation**: Save time with automated processes, reducing manual effort and the risk of errors.
 
-## Requirements
-- Python 3.6 or higher
-- SCP installed on both local and remote systems
-- [ffmpeg](https://ffmpeg.org/) installed on local system
+## Installation
+Here's a step-by-step guide to get CP2TOTO up and running on your system:
 
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/patillacode/cp2toto.git
+   ```
+2. Navigate to the project directory:
+   ```bash
+   cd cp2toto
+   ```
+3. Copy the `.env.sample` file to `.env` and configure it with your settings:
+   ```bash
+   cp .env.sample .env
+   # Edit the .env file with your preferred text editor
+   ```
+4. Set up a virtual environment and activate it:
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate
+   ```
+5. Alternatively, you can use the `Makefile` to set up your environment and install dependencies:
+   ```bash
+   make install
+   ```
 
-## Problem Solving
-This script solves several problems:
+## Usage
+To start using CP2TOTO, you can utilize the `Makefile` commands for a simplified setup process. Follow these simple steps:
 
-- It automates the process of copying files from a local system to a remote server, saving time and reducing the possibility of errors.
-- It provides an interactive terminal interface for users to select files/folders for copying, making the process more user-friendly.
-- It offers the option to convert files to mp4 with H.265 codec before copying, which can result in significant space savings on the server.
+1. Launch the script:
+   ```bash
+   python cp2toto.py
+   ```
+2. Use the interactive terminal interface to select the files or folders you wish to transfer.
+3. Choose whether to convert files to H.265 mp4 format before transfer.
+4. Confirm the transfer and let CP2TOTO handle the rest!
 
-## Contribution
-If you want to contribute to this project, please fork the repository and make changes as you'd like. Pull requests are warmly welcome.
+Example:
+```bash
+# Start the script
+python cp2toto.py
+
+# Follow the on-screen prompts to select and transfer your files.
+```
+
+## Troubleshooting
+If you encounter any issues, please check the following:
+
+- Ensure you have Python 3.6 or higher installed.
+- Verify that SCP is installed and configured on both your local and remote systems.
+- Make sure [ffmpeg](https://ffmpeg.org/) is installed if you wish to use the file conversion feature.
+
+## Contributing
+We welcome contributions of all kinds! To contribute:
+
+1. Fork the repository.
+2. Create a new branch for your feature (`git checkout -b feature/AmazingFeature`).
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`).
+4. Push to the branch (`git push origin feature/AmazingFeature`).
+5. Open a pull request.
+
+## License
+This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## Contact
-Project Link: [https://github.com/patillacode/cp2toto](https://github.com/patillacode/cp2toto)
+If you have any questions or suggestions, feel free to reach out to us at [https://github.com/patillacode/cp2toto](https://github.com/patillacode/cp2toto).
