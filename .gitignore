@@ -6,3 +6,5 @@ venv
 .env
 .vscode
 
+.autoenv.sh
+.autoenv_leave.sh
