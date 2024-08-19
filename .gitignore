@@ -8,3 +8,5 @@ venv
 
 .autoenv.sh
 .autoenv_leave.sh
+
+*.session
