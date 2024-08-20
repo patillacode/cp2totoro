@@ -20,7 +20,9 @@ def main() -> None:
     4. Asks the user if they want to convert the files to MP4 with H.265 codec.
     5. Initiates file transfer process, copying selected files to the destination folder.
     6. If successful, it asks the user if they want to remove the original files.
-    7. Finally, the function displays a farewell message and terminates the program.
+    7. Also, if the destination folder is the 'movies/' folder, it asks to send a message
+       to the Telegram channel.
+    8. Finally, the function displays a farewell message and terminates the program.
 
     The function handles two types of exceptions:
     - KeyboardInterrupt:
@@ -55,4 +57,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-    # asyncio.run(send_message_to_telegram_channel())

@@ -20,28 +20,24 @@ telegram_telethon_client = TelegramClient(
 async def test_telegram_client():
     await telegram_telethon_client.start(phone=telegram_personal_phone_number)
     async with telegram_telethon_client:
-        # return a message to the telegram channel
         await telegram_telethon_client.send_message(telegram_channel_name, "proident!")
 
 
 def ask_user_to_send_message():
-    return (
-        input(
-            colored(
-                f'\nDo you want to send a message to "{telegram_channel_name}" to inform '
-                "that you added a new movie? (y/n): ",
-                "green",
-                attrs=["bold"],
-            )
-        ).lower()
-        == "y"
+    msg = colored(
+        f'\nDo you want to send a message to "{telegram_channel_name}" to inform '
+        "that you added a new movie? (y/n): ",
+        "green",
+        attrs=["bold"],
     )
+    return input(msg).lower() == "y"
 
 
 def download_poster(url, file_path):
     try:
         response = requests.get(url)
-        response.raise_for_status()  # Check if the request was successful
+        # Check if the request was successful
+        response.raise_for_status()
         with open(file_path, "wb") as file:
             file.write(response.content)
         print(colored("Poster downloaded successfully!", "green", attrs=["dark"]))
@@ -60,8 +56,6 @@ def download_poster(url, file_path):
 
 
 def build_telegram_message():
-    # this method will build the message that needs to be sent to the telegram channel
-    # step 1: ask user for information about the movie
     msg: str = colored(
         "\nLet's get the information about the movie you want to send the message about:",
         "yellow",
