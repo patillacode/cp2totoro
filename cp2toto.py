@@ -39,11 +39,13 @@ def main() -> None:
 
         origin_files = conversion_flow(origin_files)
         scp_completed = scp(origin_files, destination_folder)
-        if scp_completed:
-            remove_local_files(origin_files)
 
+        if scp_completed:
             if destination_folder.endswith("movies/"):
                 asyncio.run(send_message_to_telegram_channel())
+
+            remove_local_files(origin_files)
+
         bye()
 
     except KeyboardInterrupt:

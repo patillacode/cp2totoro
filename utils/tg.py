@@ -55,6 +55,23 @@ def download_poster(url, file_path):
         return False
 
 
+def check_it_is_the_right_movie(imdb_link):
+    msg = colored(
+        "check the following imdb link to make sure it's the right movie: ",
+        "yellow",
+        attrs=["dark"],
+    )
+    print(msg, end="")
+
+    msg = colored(imdb_link, "green", attrs=["bold"])
+    print(msg)
+
+    msg: str = colored(
+        "\nIs this the movie you are looking for? (y/n): ", "yellow", attrs=["bold"]
+    )
+    return input(msg).lower() == "y"
+
+
 def build_telegram_message():
     msg: str = colored(
         "\nLet's get the information about the movie you want to send the message about:",
@@ -98,8 +115,22 @@ def build_telegram_message():
     download_poster(poster, poster_path)
 
     imdb_link = f"https://www.imdb.com/title/{movie_data['imdbID']}/"
-    rating = movie_data["imdbRating"]
+    imdb_rating = movie_data["imdbRating"]
+    rotten_tomatoes_rating = movie_data["Ratings"][1]["Value"]
     genre = movie_data["Genre"]
+
+    if not check_it_is_the_right_movie(imdb_link):
+        msg: str = colored(
+            "The movie data fetched is not the one you are looking for.",
+            "red",
+            attrs=["bold"],
+        )
+        print(msg)
+
+        msg = colored("You're gonna need to this one manually.", "red", attrs=["dark"])
+        print(msg)
+
+        return None, None
 
     message = f"""
 **{title}**
@@ -110,7 +141,8 @@ __{plot}__
 
 🎬 **Género:** {genre}
 📅 **Año:** {year}
-⭐️ **Valoración en IMDB:** {rating}
+⭐️ **Valoración en IMDB:** {imdb_rating}
+🍅 **Valoración en Rotten Tomatoes:** {rotten_tomatoes_rating}
 🔗 [IMDB]({imdb_link})
 """
 
@@ -122,18 +154,18 @@ async def send_message_to_telegram_channel():
         message, poster_path = build_telegram_message()
         if message:
             print(
-                colored("Sending message to Telegram channel...", "green", attrs=["dark"])
+                colored(
+                    "Sending message to Telegram channel...", "green", attrs=["dark"]
+                ),
+                end=" ",
             )
             await telegram_telethon_client.start(phone=telegram_personal_phone_number)
             async with telegram_telethon_client:
                 await telegram_telethon_client.send_file(
                     telegram_channel_name, poster_path, caption=message
                 )
-                msg: str = colored(
-                    f"Message sent to {telegram_channel_name} successfully!",
-                    "green",
-                    attrs=["bold"],
-                )
+                icon: str = colored("􀆅", "green", attrs=["bold"])
+                print(icon)
     else:
         msg: str = colored(
             "Ok, not sending any message to the Telegram channel.",
