@@ -1,3 +1,4 @@
+import asyncio
 import sys
 import traceback
 
@@ -5,6 +6,7 @@ from utils.menu import select_destination, select_origin
 from utils.misc import conversion_flow, remove_local_files
 from utils.output import bye, welcome
 from utils.scp_connect import scp
+from utils.tg import send_message_to_telegram_channel
 
 
 def main() -> None:
@@ -15,9 +17,12 @@ def main() -> None:
     1. Displays a welcome message to the user.
     2. Prompts the user to select the files they want to transfer (origin files).
     3. Asks the user to specify the destination folder where the files will be transferred
-    4. Initiates file transfer process, copying selected files to the destination folder.
-    5. If successful, it asks the user if they want to remove the original files.
-    6. Finally, the function displays a farewell message and terminates the program.
+    4. Asks the user if they want to convert the files to MP4 with H.265 codec.
+    5. Initiates file transfer process, copying selected files to the destination folder.
+    6. If successful, it asks the user if they want to remove the original files.
+    7. Also, if the destination folder is the 'movies/' folder, it asks to send a message
+       to the Telegram channel.
+    8. Finally, the function displays a farewell message and terminates the program.
 
     The function handles two types of exceptions:
     - KeyboardInterrupt:
@@ -31,11 +36,14 @@ def main() -> None:
         welcome()
         origin_files = select_origin()
         destination_folder = select_destination()
+
         origin_files = conversion_flow(origin_files)
         scp_completed = scp(origin_files, destination_folder)
         if scp_completed:
             remove_local_files(origin_files)
 
+            if destination_folder.endswith("movies/"):
+                asyncio.run(send_message_to_telegram_channel())
         bye()
 
     except KeyboardInterrupt:

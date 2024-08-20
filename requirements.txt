@@ -1,10 +1,12 @@
 ffmpeg-python==0.2.0
-paramiko==3.1.0
+paramiko==3.4.1
 pyfiglet==0.8.post1
 pytest==7.4.2
 python-dotenv==1.0.0
 pyyaml==6.0.1
 rich==13.4.1
+requests==2.32.3
 scp==0.14.5
 simple-term-menu==1.6.1
+Telethon==1.32.1
 termcolor==2.2.0
