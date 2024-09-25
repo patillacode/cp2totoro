@@ -1,4 +1,5 @@
 import asyncio
+import re
 import sys
 import traceback
 
@@ -41,7 +42,9 @@ def main() -> None:
         scp_completed = scp(origin_files, destination_folder)
 
         if scp_completed:
-            if destination_folder.endswith("movies/"):
+            pattern = r"/(movies|series)/"
+
+            if re.search(pattern, destination_folder) is not None:
                 asyncio.run(send_message_to_telegram_channel())
 
             remove_local_files(origin_files)

@@ -26,7 +26,7 @@ async def test_telegram_client():
 def ask_user_to_send_message():
     msg = colored(
         f'\nDo you want to send a message to "{telegram_channel_name}" to inform '
-        "that you added a new movie? (y/n): ",
+        "that you added new content to Totoro? (y/n): ",
         "green",
         attrs=["bold"],
     )
@@ -57,7 +57,7 @@ def download_poster(url, file_path):
 
 def check_it_is_the_right_movie(imdb_link):
     msg = colored(
-        "check the following imdb link to make sure it's the right movie: ",
+        "check the following imdb link to make sure it's the right media: ",
         "yellow",
         attrs=["dark"],
     )
@@ -67,14 +67,14 @@ def check_it_is_the_right_movie(imdb_link):
     print(msg)
 
     msg: str = colored(
-        "\nIs this the movie you are looking for? (y/n): ", "yellow", attrs=["bold"]
+        "\nIs this the media you are looking for? (y/n): ", "yellow", attrs=["bold"]
     )
     return input(msg).lower() == "y"
 
 
 def build_telegram_message():
     msg: str = colored(
-        "\nLet's get the information about the movie you want to send the message about:",
+        "\nLet's get the information about the media you want to send the message about:",
         "yellow",
         attrs=["bold"],
     )
@@ -96,8 +96,10 @@ def build_telegram_message():
         f"&y={movie_year}"
         "&plot=short&r=json"
     )
+
     try:
         movie_data = requests.get(api_url).json()
+
     except Exception as err:
         msg: str = colored(
             f"An error occurred while fetching the movie data: {err}",
@@ -116,12 +118,20 @@ def build_telegram_message():
 
     imdb_link = f"https://www.imdb.com/title/{movie_data['imdbID']}/"
     imdb_rating = movie_data["imdbRating"]
-    rotten_tomatoes_rating = movie_data["Ratings"][1]["Value"]
+
+    try:
+        rotten_tomatoes_rating = movie_data["Ratings"][1]["Value"]
+        rotten_tomatoes_message = (
+            f"🍅 **Valoración en Rotten Tomatoes:** {rotten_tomatoes_rating}"
+        )
+    except IndexError:
+        rotten_tomatoes_rating = None
+
     genre = movie_data["Genre"]
 
     if not check_it_is_the_right_movie(imdb_link):
         msg: str = colored(
-            "The movie data fetched is not the one you are looking for.",
+            "The content data fetched is not the one you are looking for.",
             "red",
             attrs=["bold"],
         )
@@ -135,14 +145,14 @@ def build_telegram_message():
     message = f"""
 **{title}**
 
-¡Nueva película ya disponible en el servidor!
+¡Nuevo contenido ya disponible en el servidor!
 
 __{plot}__
 
 🎬 **Género:** {genre}
 📅 **Año:** {year}
 ⭐️ **Valoración en IMDB:** {imdb_rating}
-🍅 **Valoración en Rotten Tomatoes:** {rotten_tomatoes_rating}
+{rotten_tomatoes_message if rotten_tomatoes_rating else ""}
 🔗 [IMDB]({imdb_link})
 """
 
