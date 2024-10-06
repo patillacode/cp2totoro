@@ -1,3 +1,4 @@
+import argparse
 import asyncio
 import re
 import sys
@@ -25,6 +26,10 @@ def main() -> None:
        to the Telegram channel.
     8. Finally, the function displays a farewell message and terminates the program.
 
+    Args:
+        -tg: Optional argument to send a message to the Telegram channel and skip the rest
+             of the flow.
+
     The function handles two types of exceptions:
     - KeyboardInterrupt:
         If the user interrupts the program (e.g., by pressing Ctrl+C), the function
@@ -33,8 +38,25 @@ def main() -> None:
         If any other type of exception occurs, the function prints the exception details
         and exits with a status code of 1.
     """
+
+    parser = argparse.ArgumentParser(
+        description="File management and optionally send a Telegram message."
+    )
+    parser.add_argument(
+        "-tg",
+        "--send_tg_message_only",
+        action="store_true",
+        help="Only send a message to the Telegram channel and skip the rest of the flow.",
+    )
+    args = parser.parse_args()
+
     try:
         welcome()
+
+        if args.send_tg_message_only:
+            asyncio.run(send_message_to_telegram_channel())
+            sys.exit()
+
         origin_files = select_origin()
         destination_folder = select_destination()
 
