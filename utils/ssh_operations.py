@@ -101,15 +101,12 @@ def rename_files(origin_files: list, destination_folder: str) -> None:
     Raises:
         Exception: If there is an error with the SSH connection or command execution.
     """
-    print(
-        colored(f"\nRenaming files in {destination_folder}", "yellow", attrs=["bold"])
-    )
     rename_confirmation: str = input(
         colored("Do you want to rename the files? [y/n]: ", "yellow", attrs=["bold"])
     )
-    print()
     if rename_confirmation.lower() not in ["y", "yes"]:
         return
+    print()
     # Extract serie_name and season_number from the destination_folder path
     season_folder = destination_folder.rstrip("/")
     season_number = season_folder.split("/")[-1]
