@@ -63,6 +63,14 @@ def establish_ssh_and_scp(origin_files: list, destination_folder: str) -> None:
                     print(f"{file_msg} {icon} {' ' * 30}")
 
     except Exception as ssh_error:
+        print(
+            colored(
+                "Maybe you need to make sure the key is added? Try:",
+                "red",
+                attrs=["bold"],
+            )
+        )
+        print(colored("ssh-add -l", "yellow"))
         raise Exception(f"An error occurred with the ssh connection: {ssh_error}")
 
 
@@ -102,7 +110,7 @@ def rename_files(origin_files: list, destination_folder: str) -> None:
         Exception: If there is an error with the SSH connection or command execution.
     """
     rename_confirmation: str = input(
-        colored("Do you want to rename the files? [y/n]: ", "yellow", attrs=["bold"])
+        colored("Do you want to rename the files? [y/N]: ", "yellow", attrs=["bold"])
     )
     if rename_confirmation.lower() not in ["y", "yes"]:
         return

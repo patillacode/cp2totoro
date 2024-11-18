@@ -26,7 +26,7 @@ async def test_telegram_client():
 def ask_user_to_send_message():
     msg = colored(
         f'\nDo you want to send a message to "{telegram_channel_name}" to inform '
-        "that you added new content to Totoro? (y/n): ",
+        "that you added new content to Totoro? (y/N): ",
         "green",
         attrs=["bold"],
     )

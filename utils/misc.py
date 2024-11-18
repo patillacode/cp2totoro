@@ -66,7 +66,7 @@ def confirmation_flow(origin_files: list, destination_folder: str) -> bool:
     print(msg, destination_msg)
     print_files_to_copy(origin_files)
     copy_confirmation: str = input(
-        colored("\nConfirm to copy [y/n]: ", "green", attrs=["bold"])
+        colored("\nConfirm to copy [y/N]: ", "green", attrs=["bold"])
     )
     if copy_confirmation.lower() in ["y", "yes"]:
         return True
@@ -95,7 +95,7 @@ def conversion_flow(origin_files: list) -> list:
     print(colored("This can be a lengthy process.", "magenta", attrs=["bold"]))
     print_files_to_copy(origin_files)
     convert_confirmation: str = input(
-        colored("\nConfirm conversion [y/n]: ", "yellow", attrs=["bold"])
+        colored("\nConfirm conversion [y/N]: ", "yellow", attrs=["bold"])
     )
     if convert_confirmation.lower() in ["y", "yes"]:
         new_origin_files = []
@@ -104,9 +104,7 @@ def conversion_flow(origin_files: list) -> list:
                 if file_names:
                     new_origin_dict = {directory: []}
                     for file_name in file_names:
-                        new_file_path = convert_to_H265_codec(
-                            f"{directory}/{file_name}"
-                        )
+                        new_file_path = convert_to_H265_codec(f"{directory}/{file_name}")
                         new_file = Path(new_file_path)
                         new_origin_dict[directory].append(
                             f"{new_file.stem}{new_file.suffix}"
@@ -172,9 +170,7 @@ def convert_to_H265_codec(origin_file: str) -> str:
             formatted_time = "{:0>2}:{:0>2}:{:05.2f}".format(
                 int(hours), int(minutes), seconds
             )
-            print(
-                f"Conversion time: {colored(formatted_time, 'white', attrs=['bold'])}"
-            )
+            print(f"Conversion time: {colored(formatted_time, 'white', attrs=['bold'])}")
             print(
                 f"Space saved: {colored(f'{size_reduction}%', 'magenta', attrs=['bold'])}"
                 f" {colored(f'({space_saved})', 'cyan', attrs=['bold'])}"
@@ -257,7 +253,7 @@ def remove_local_files(origin_items: list) -> None:
 
     remove_local_files: str = input(
         colored(
-            "\nDo you want to remove the local files? (check paths above) [y/n]: ",
+            "\nDo you want to remove the local files? (check paths above) [y/N]: ",
             "yellow",
             attrs=["bold"],
         )
