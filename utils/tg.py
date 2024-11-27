@@ -174,7 +174,7 @@ async def send_message_to_telegram_channel():
                 await telegram_telethon_client.send_file(
                     telegram_channel_name, poster_path, caption=message
                 )
-                icon: str = colored("􀆅", "green", attrs=["bold"])
+                icon: str = colored("", "green", attrs=["bold"])
                 print(icon)
     else:
         msg: str = colored(
