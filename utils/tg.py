@@ -109,11 +109,23 @@ def build_telegram_message():
         print(msg)
         return None, None
 
-    title = movie_data["Title"]
-    year = movie_data["Year"]
-    plot = movie_data["Plot"]
-    poster = movie_data["Poster"]
-    poster_path = f"/tmp/{title}.jpg"
+    try:
+        title = movie_data["Title"]
+        year = movie_data["Year"]
+        plot = movie_data["Plot"]
+        poster = movie_data["Poster"]
+        poster_path = f"/tmp/{title}.jpg"
+
+    except KeyError as err:
+        msg: str = colored(
+            f"An error occurred while extracting the data: {err}",
+            "red",
+            attrs=["bold"],
+        )
+        print(msg)
+        print(colored(f"movie_data: {movie_data}", "red", attrs=["dark"]))
+        return None, None
+
     download_poster(poster, poster_path)
 
     imdb_link = f"https://www.imdb.com/title/{movie_data['imdbID']}/"
@@ -174,7 +186,7 @@ async def send_message_to_telegram_channel():
                 await telegram_telethon_client.send_file(
                     telegram_channel_name, poster_path, caption=message
                 )
-                icon: str = colored("", "green", attrs=["bold"])
+                icon: str = colored("􀆅 ", "green", attrs=["bold"])
                 print(icon)
     else:
         msg: str = colored(

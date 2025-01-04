@@ -46,7 +46,7 @@ def bye(goodbye_msg="\nFarewell!\n") -> None:
     """
     msg: str = colored(goodbye_msg, "red", attrs=["bold"])
     print(msg)
-    sys.exit(1)
+    sys.exit(0)
 
 
 def welcome() -> None:

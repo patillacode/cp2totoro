@@ -22,9 +22,15 @@ def print_files_to_copy(origin_files: list) -> None:
         list of file names in that directory.
     """
     for full_item in origin_files:
+        item_folder_path = f"{list(full_item.keys())[0]}"
         for file_names in full_item.values():
             for file_name in file_names:
+                file_size = format_size(
+                    os.path.getsize(f"{item_folder_path}/{file_name}")
+                )
                 msg: str = colored(f"- {file_name}", "cyan", attrs=["bold"])
+                print(msg, end=" ")
+                msg = colored(f"({file_size})", "magenta", attrs=["bold"])
                 print(msg)
 
 
